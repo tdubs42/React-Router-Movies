@@ -1,36 +1,55 @@
+/** @format */
+// Base React Imports
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Route, Switch } from 'react-router-dom';
 
+// HTTP Client
+import Axios from 'axios';
+
+// React Component Imports
 import SavedList from './Movies/SavedList';
+import MovieList from './Movies/Movie';
+import Movie from './Movies/Movie';
 
-export default function App () {
-  const [saved, setSaved] = useState([]); // Stretch: the ids of "saved" movies
-  const [movieList, setMovieList] = useState([]);
+export default function App() {
+	const [saved, setSaved] = useState([]); // Stretch: the ids of "saved" movies
+	const [movieList, setMovieList] = useState([]);
 
-  useEffect(() => {
-    const getMovies = () => {
-      axios
-        .get('http://localhost:5000/api/movies') // Study this endpoint with Postman
-        .then(response => {
-          // Study this response with a breakpoint or log statements
-          // and set the response data as the 'movieList' slice of state
-        })
-        .catch(error => {
-          console.error('Server Error', error);
-        });
-    }
-    getMovies();
-  }, []);
+	useEffect(() => {
+		const getMovies = () => {
+			Axios.get('http://localhost:5000/api/movies')
+				.then((res) => {
+					setMovieList(res.data);
+					console.log(movieList);
+				})
+				.catch((err) => {
+					console.error('Server Error', err);
+				});
+		};
+		getMovies();
+	}, []);
 
-  const addToSavedList = id => {
-    // This is stretch. Prevent the same movie from being "saved" more than once
-  };
+	const addToSavedList = (id) => {
+		// This is stretch. Prevent the same movie from being "saved" more than once
+	};
 
-  return (
-    <div>
-      <SavedList list={[ /* This is stretch */]} />
-
-      <div>Replace this Div with your Routes</div>
-    </div>
-  );
+	return (
+		<div>
+			<SavedList
+				list={
+					[
+						/* This is stretch */
+					]
+				}
+			/>
+			<Switch>
+				<Route exact path='/'>
+					<MovieList movies={movieList} />
+				</Route>
+				<Route path='/Movies/:id'>
+					<Movie />
+				</Route>
+			</Switch>
+		</div>
+	);
 }
