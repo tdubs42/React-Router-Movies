@@ -8,7 +8,7 @@ import Axios from 'axios';
 
 // React Component Imports
 import SavedList from './Movies/SavedList';
-import MovieList from './Movies/Movie';
+import MovieList from './Movies/MovieList';
 import Movie from './Movies/Movie';
 
 export default function App() {
@@ -20,7 +20,6 @@ export default function App() {
 			Axios.get('http://localhost:5000/api/movies')
 				.then((res) => {
 					setMovieList(res.data);
-					console.log(movieList);
 				})
 				.catch((err) => {
 					console.error('Server Error', err);
@@ -46,7 +45,7 @@ export default function App() {
 				<Route exact path='/'>
 					<MovieList movies={movieList} />
 				</Route>
-				<Route path='/Movies/:id'>
+				<Route exact path='/movies/:id'>
 					<Movie />
 				</Route>
 			</Switch>
